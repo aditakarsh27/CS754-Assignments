@@ -9,20 +9,20 @@ function F = get_orig(E, C, p, eps)
  
     for i = 1:(H-p+1)
         for j = 1:(W-p+1)
-            yk = reshape(E(i:i+p-1,j:j+p-1),[p^2,1]);
-            Ak = zeros(p^2,T*p^2);
+            yk = reshape(E(i:i+p-1,j:j+p-1), [p^2,1]);
+            Ak = zeros(p^2, T*p^2);
             for t = 1:T
-                phikt = diag(reshape(C(i:i+p-1,j:j+p-1,t),[p^2,1]));
-                Ak(:,1+(t-1)*p^2:t*p^2) = phikt*psi;
+                phikt = diag(reshape(C(i:i+p-1,j:j+p-1,t), [p^2,1]));
+                Ak(:, 1+(t-1)*p^2:t*p^2) = phikt * psi;
             end
-            thetak = OMP(yk,Ak,eps);
+            thetak = OMP(yk, Ak, eps);
             for t = 1:T
                 fkt = psi*thetak(1+(t-1)*p^2:t*p^2);
-                fkt = reshape(fkt,[p,p]);
-                F(i:i+p-1,j:j+p-1,t) = F(i:i+p-1,j:j+p-1,t) + fkt;
-                F_count(i:i+p-1,j:j+p-1,t) = F_count(i:i+p-1,j:j+p-1,t) + ones(p,p); 
+                fkt = reshape(fkt, [p,p]);
+                F(i:i+p-1, j:j+p-1,t) = F(i:i+p-1, j:j+p-1,t) + fkt;
+                F_count(i:i+p-1, j:j+p-1,t) = F_count(i:i+p-1, j:j+p-1,t) + ones(p, p); 
             end
         end
     end
-    F = F./F_count;
+    F = F ./ F_count;
 end
