@@ -9,7 +9,8 @@ H = 120;
 W = 240;
 F = zeros(H, W, T);
 for t=1:T
-    F(:,:,t) = cars.frames(i).cdata(end-119:end,end-239:end);
+    F(:,:,t) = cars.frames(t).cdata(end-119:end,end-239:end);
+    imwrite(cars.frames(t).cdata(end-119:end,end-239:end), ['./images/cars_frame',int2str(t),'.png']);
 end
 
 %% (b)
@@ -19,7 +20,9 @@ E = sum(C .* F, 3);
 
 sigma = 2;
 N = normrnd(0, sigma, H, W);
-I_noisy = E + N;
-imshow(rescale(I_noisy));
+E_noisy = E + N;
+imshow(rescale(E_noisy));
 title("Coded Snapshot");
-imwrite(rescale(I_noisy), './images/coded_snap.png');
+imwrite(rescale(E_noisy), './images/coded_snap.png');
+
+%% 
