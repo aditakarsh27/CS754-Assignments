@@ -1,4 +1,4 @@
-function F = get_orig(E, C, p, eps)
+function F = get_recons(E, C, p, eps)
     psi = kron(dctmtx(p)', dctmtx(p)');
     H = size(C,1);
     W = size(C,2);

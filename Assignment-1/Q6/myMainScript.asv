@@ -30,15 +30,11 @@ imwrite(rescale(E_noisy), './images/coded_snap.png');
 
 %% (d), (e)
 p = 8;
-eps = sqrt(p)*sigma;
+eps = 8*sigma;
 F_re = get_recons(E_noisy, C, p, eps);
-%% 
+%% a
 for t=1:T
     imwrite([rescale(F_re(:,:,t)) rescale(F(:,:,t))], ['./images/cars_T3re',int2str(t),'.png']);
-    figure;
-    imshow([rescale(F_re(:,:,t)) rescale(F(:,:,t))]);
-    title("t = "+int2str(t)+" of 3");
+    imshow
 end
-close all;
-
 

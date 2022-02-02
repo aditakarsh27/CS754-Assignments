@@ -1,5 +1,5 @@
 function theta = OMP(y, A, eps)
-    r = y_k;
+    r = y;
     theta = zeros(size(A, 2), 1);
     T = [];
     A = normc(A);
