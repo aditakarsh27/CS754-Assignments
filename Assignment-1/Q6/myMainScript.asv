@@ -30,7 +30,7 @@ imwrite(rescale(E_noisy), './images/coded_snap.png');
 
 %% (d), (e)
 p = 8;
-eps = sqrt(p)*sigma;
+eps = 8*sigma;
 F_re = get_recons(E_noisy, C, p, eps);
 %% 
 for t=1:T
@@ -100,20 +100,18 @@ close all;
 
 
 %% (h)
-T = 5;
-
 flame = mmread('./data/flame.avi');
 for i=1:length(flame.frames)
     flame.frames(i).cdata = rgb2gray(flame.frames(i).cdata);
 end
-T = 3;
-H = 120;
-W = 240;
+T = 5;
+H = flame.height;
+W = flame.width;
 F = zeros(H, W, T);
 offset = 30;
 for t=1:T
-    F(:,:,t) = cars.frames(t).cdata(end-119:end,end-239:end);
-    imwrite(cars.frames(t).cdata(end-119:end,end-239:end), ['./images/flame_frame', int2str(t), '.png']);
+    F(:,:,t) = flame.frames(offset+t).cdata;
+    imwrite(flame.frames(offset+t).cdata, ['./images/flame_frame', int2str(t), '.png']);
 end
 C = randi([0,1], H, W, T);
 E = sum(C .* F, 3);
@@ -122,16 +120,16 @@ N = normrnd(0, sigma, H, W);
 E_noisy = E + N;
 imshow(rescale(E_noisy));
 title("Coded Snapshot");
-imwrite(rescale(E_noisy), './images/coded_snap2.png');
+imwrite(rescale(E_noisy), './images/coded_snap4.png');
 F_re = get_recons(E_noisy, C, p, eps);
 for t=1:T
-    imwrite([rescale(F_re(:,:,t)) rescale(F(:,:,t))], ['./images/cars_T5re', int2str(t), '.png']);
+    imwrite([rescale(F_re(:,:,t)) rescale(F(:,:,t))], ['./images/flame_re', int2str(t), '.png']);
     figure;
     imshow([rescale(F_re(:,:,t)) rescale(F(:,:,t))]);
     title("t = " + int2str(t) + " of 5");
 end
 rmse = mean((F_re - F).^2,'all') / mean(F.^2, 'all');
-disp("T = 5");
+disp("T = 5 flame");
 disp(rmse);
 close all;
 

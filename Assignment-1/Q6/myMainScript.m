@@ -30,7 +30,7 @@ imwrite(rescale(E_noisy), './images/coded_snap.png');
 
 %% (d), (e)
 p = 8;
-eps = 2*sigma;
+eps = 25;
 F_re = get_recons(E_noisy, C, p, eps);
 %% 
 for t=1:T
@@ -40,9 +40,8 @@ for t=1:T
     title("t = " + int2str(t) + " of 3");
 end
 rmse = mean((F_re - F).^2,'all') / mean(F.^2, 'all');
-disp("T = 3");
+disp("T = 3 RMSE");
 disp(rmse);
-close all;
 
 
 %% (f)
@@ -68,9 +67,8 @@ for t=1:T
     title("t = " + int2str(t) + " of 5");
 end
 rmse = mean((F_re - F).^2,'all') / mean(F.^2, 'all');
-disp("T = 5");
+disp("T = 5 RMSE");
 disp(rmse);
-close all;
 
 T = 7;
 F = zeros(H, W, T);
@@ -94,10 +92,8 @@ for t=1:T
     title("t = " + int2str(t) + " of 7");
 end
 rmse = mean((F_re - F).^2,'all') / mean(F.^2, 'all');
-disp("T = 7");
+disp("T = 7 RMSE");
 disp(rmse);
-close all;
-
 
 %% (h)
 flame = mmread('./data/flame.avi');
@@ -129,7 +125,7 @@ for t=1:T
     title("t = " + int2str(t) + " of 5");
 end
 rmse = mean((F_re - F).^2,'all') / mean(F.^2, 'all');
-disp("T = 5 flame");
+disp("T = 5 flame RMSE");
 disp(rmse);
 close all;
 
