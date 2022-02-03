@@ -17,8 +17,7 @@ function F = get_recons(E, C, p, eps)
             end
             thetak = OMP(yk, Ak, eps);
             for t = 1:T
-                %fkt = psi*thetak(1+(t-1)*p^2:t*p^2);
-                fkt = thetak(1+(t-1)*p^2:t*p^2); %
+                fkt = thetak(1+(t-1)*p^2:t*p^2); 
                 fkt = reshape(fkt, [p,p]);
                 fkt = idct2(fkt);
                 

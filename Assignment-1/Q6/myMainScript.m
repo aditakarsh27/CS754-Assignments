@@ -107,7 +107,6 @@ F = zeros(H, W, T);
 offset = 30;
 for t=1:T
     F(:,:,t) = flame.frames(offset+t).cdata;
-    imwrite(flame.frames(offset+t).cdata, ['./images/flame_frame', int2str(t), '.png']);
 end
 C = randi([0,1], H, W, T);
 E = sum(C .* F, 3);
@@ -127,5 +126,4 @@ end
 rmse = mean((F_re - F).^2,'all') / mean(F.^2, 'all');
 disp("T = 5 flame RMSE");
 disp(rmse);
-close all;
 
