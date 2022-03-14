@@ -1,0 +1,37 @@
+x = double(imread("barbara256.png"));
+n = 2*randn(size(x));
+y = x+n;
+U = kron(dctmtx(8)', dctmtx(8)');
+A = U;
+alpha = max(eig(A'*A))+0.1;
+counts = zeros(size(x));
+for i=1:1:256-7
+    for j=1:1:256-7
+        y_patch = y(i:i+7, j:j+7);
+        y_patch = y_patch(:);
+        lambda = 1/(2*alpha);
+        theta = zeros(64, 1);
+        steps = 100;
+        for k=1:steps
+            y = theta + (1/alpha)*A'*(y_patch-A*theta);
+            for l=1:length(y)
+                if y(l) >= lambda
+                    theta(l) = y(l) - lambda;
+                elseif y(i) <= -lambda
+                    theta(l) = y(l) + lambda;
+                else
+                    theta(l) = 0;
+                end
+            end
+        end
+        patch = dct_2d*theta;
+        patch = reshape(patch, 8, 8);
+        x_new(i:i+7, j:j+7) = x_new(i:i+7, j:j+7) + patch;
+        counts(i:i+7, j:j+7) = counts(i:i+7, j:j+7) + 1;
+    end
+end
+x_new = x_new./counts;
+
+
+%%
+montage(x, x_new,
