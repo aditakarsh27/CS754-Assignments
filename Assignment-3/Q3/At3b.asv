@@ -1,0 +1,11 @@
+classdef At3b
+   methods
+       function product = mtimes(x)
+                x = reshape(x, 217, 217);
+                beta = idct2(x);
+                angles = 0:10:170;
+                product = radon(beta, angles);
+                product = product(:);
+       end
+   end
+end
