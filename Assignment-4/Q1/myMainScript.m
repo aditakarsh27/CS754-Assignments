@@ -28,16 +28,25 @@ y_V = y(V);
 phi_R = phi(R,:);
 phi_V = phi(V,:);
 VE = zeros(11,1);
+E = zeros(11,1);
 %% Trying for different lambdas
 for lambda = lambdas
     [x_est(:,g),status] = l1_ls(phi_R,y_R,lambda,rel_tol,quiet);
     VE(g) = sum((y_V-phi_V*x_est(:,g)).^2)/20;
+    E(g) = norm(x_est(:,g)-x, 'fro')/norm(x, 'fro');
     g = g+1;
-    display(status); 
+    display(status);  
 end
 
-%% Plot
-plot(lambdas,VE, '-o');
+%% Plots
+figure;
+plot(log(lambdas),VE, '-o');
 title("Validation error vs lambdas");
 xlabel('lambdas') 
 ylabel('Validation error') 
+
+figure;
+plot(log(lambdas),E, '-o');
+title("RMS error vs lambdas");
+xlabel('lambdas') 
+ylabel('RMSE') 
