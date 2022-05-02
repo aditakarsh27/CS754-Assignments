@@ -33,12 +33,14 @@ for i=0:9
     figure(); imshow(reshape(V2(:,1) + mu, [28 28]));
 end
 %%
-Xtest = training.images(:,:,1:5);
-Xtest = reshape(Xtest, [p  5]);
-TestLabels = training.labels(1:5);
-TestPredictions = zeros(5,1);
-for i=1:5
+n = 10000;
+Xtest = training.images(:,:,1:n);
+Xtest = reshape(Xtest, [p  n]);
+TestLabels = training.labels(1:n);
+TestPredictions = zeros(n,1);
+for i=1:n
     TestPredictions(i,1) = predict_number(Xtest(:,i), eigenbases_approx, means);
 end
-
-
+Test_accuracy = sum(TestLabels==TestPredictions,'all')/size(TestPredictions,1);
+disp ('Accuracy %:');
+disp(Test_accuracy*100);
