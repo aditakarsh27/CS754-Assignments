@@ -62,7 +62,7 @@ title('chosen image reconstructed from sample covariance matrix');
 
 Vk = V2(:,1:k);         
 beta = (Vk.')*img;      
-reconstructed_approx = reshape((Uk * beta) + mu, 28,28);
+reconstructed_approx = reshape((Vk * beta) + mu, 28,28);
 figure(); imshow(reconstructed_approx);
 title('chosen image reconstructed from estimated covariance matrix');
 
