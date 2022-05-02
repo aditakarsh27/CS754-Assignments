@@ -11,14 +11,16 @@ X = reshape(X, [p  n]);
 mu = mean(X, 2);
 X = X - mu;
 
-figure(); imshow(reshape(X(:,1) + mu, [28 28]));
-title('sample image from dataset');
+img = X(:,1);
+
+figure(); imshow(reshape(img + mu, [28 28]));
+title('chosen image from dataset');
 figure(); imshow(reshape(mu, [28 28]));
-title('sample mean image');
+title('mean image');
 %% Generate random p×m projection matrices
 m = 40;
 s = 60;
-k = s-3;
+K = s-3;
 R = binornd(1, 1/s, n,p,m);
 pos = binornd(1, 0.5, n,p,m);
 pos(pos==0) = -1;
@@ -34,28 +36,35 @@ end
 %% Estimate Covariance, Σ p×p
 C_hat = s^2/((m + m^2)*n) * (X_hat * X_hat.');
 
-a1 = k/(m+k+1);
-a2 = (m+1)/((m+1+k)*(m+1+k+p));
+a1 = K/(m+K+1);
+a2 = (m+1)/((m+1+K)*(m+1+K+p));
 I_pp = eye(p,p);
 diag_C_hat = I_pp.*C_hat;
 
 sigma_hat = C_hat - a1*diag_C_hat - a2*trace(C_hat)*I_pp;
 %% Comparing eigenvalues
 [U1, S, V1] = svd(X);
-figure(); imshow(reshape(U1(:,1) + mu, [28 28]));
+figure(); imshow(reshape(U1(:,2) + mu, [28 28]));
 title('First eigenvector of sample covariance matrix');
 
 [V2,D] = eig(sigma_hat);
 [d, ind] = sort(diag(D), 'descend');
 V2 = V2(:, ind);
-figure(); imshow(reshape(V2(:,1) + mu, [28 28]));
+figure(); imshow(reshape(V2(:,2) + mu, [28 28]));
 title('First eigenvector of estimated covariance matrix');
 
-% Uk = U(:,1:K(i));         
-% alpha = (Uk.')*im1;      
-% im2 = (Uk * alpha) + mu;
-% im3 = reshape(im2,112,92);
-% figure(); imshow(im3/255);
+k = 10;
+Uk = U1(:,1:k);         
+alpha = (Uk.')*img;      
+reconstructed_true = reshape((Uk * alpha) + mu, 28,28);
+figure(); imshow(reconstructed_true);
+title('chosen image reconstructed from sample covariance matrix');
+
+Vk = V2(:,1:k);         
+beta = (Vk.')*img;      
+reconstructed_approx = reshape((Uk * beta) + mu, 28,28);
+figure(); imshow(reconstructed_approx);
+title('chosen image reconstructed from estimated covariance matrix');
 
 
 
