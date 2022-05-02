@@ -4,11 +4,12 @@ load('mnist1.mat');
 %% Setting up p×n matrix - X
 zero_labels = (test.labels==0);
 X = test.images(:,:,zero_labels);
-m = 40;
-s = 60;
-num_samples = 100;
+X_3D = X;
+m = 98;
+s = 147;
+num_samples = 10;
+sigma_hat = estimator(num_samples, m, s, X_3D);
 
-sigma_hat = estimator(num_samples, m, s, X);
 
 p = size(X,1)*size(X,2);
 n = size(X,3);
@@ -19,6 +20,7 @@ X = X - mu;
 
 % figure(); imshow(reshape(mu, [28 28]));
 % title('sample mean image');
+
 
 
 
@@ -68,8 +70,37 @@ imwrite(reconstructed_approx, 'est_50.png');
 title('chosen image reconstructed from top 50 eigenvectors of estimated covariance matrix');
 
 C_n = cov(X');
-display('RMSE:');
-display(norm(C_n-sigma_hat)/norm(C_n));
+disp('RMSE:');
+disp(norm(C_n-sigma_hat)/norm(C_n));
+
+
+%% Graph for variation in number of samples
+iters = [10 20 50 100 500 1000];
+mses = zeros(size(iters,2));
+for i = 1:size(iters,2)
+    sigma_hat = estimator(iters(i), m, s, X_3D);
+    mses(i) = norm(C_n-sigma_hat)/norm(C_n);
+end
+
+%%
+plot(iters, mses);
+xlabel('Number of samples');
+ylabel('Relative MSE');
+title('Variation of MSE with number of samples');
+
+%% Graph for variation in gamma
+s_vals = [980 490 327 245 196 163];
+mses_s = zeros(size(s_vals,2));
+for i = 1:size(s_vals,2)
+    sigma_hat = estimator(100, m, s_vals(i), X_3D);
+    mses_s(i) = norm(C_n-sigma_hat)/norm(C_n);
+end
+
+%%
+plot(m./s_vals, mses);
+xlabel('Compression factor');
+ylabel('Relative MSE');
+title('Variation of MSE with compression factor');
 
 
 
