@@ -2,7 +2,7 @@ clc;
 % clear;
 load('mnist1.mat');
 %% Setting up p×n matrix - X
-digit = 8;
+digit = 0;
 zero_labels = (test.labels==digit);
 X = test.images(:,:,zero_labels);
 X_3D = X;
@@ -28,14 +28,10 @@ title('sample image from dataset');
 
 %% Image Reconstruction
 [U1, S, V1] = svd(X);
-% figure(); imshow(reshape(U1(:,2) + mu, [28 28]));
-% title('First eigenvector of sample covariance matrix');
 
 [V2,D] = eig(sigma_hat);
 [d, ind] = sort(diag(D), 'descend');
 V2 = V2(:, ind);
-% figure(); imshow(reshape(V2(:,2) + mu, [28 28]));
-% title('First eigenvector of estimated covariance matrix');
 
 k = 10;
 Uk = U1(:,1:k);         
@@ -104,7 +100,7 @@ title('Variation of Relative MSE with number of samples');
 s_vals = [980 490 327 245 196 163];
 mses_s = zeros(size(s_vals,2),1);
 for i = 1:size(s_vals,2)
-    sigma_hat = estimator(5, m, s_vals(i), X_3D);
+    sigma_hat = estimator(1, m, s_vals(i), X_3D);
     mses_s(i) = norm(C_n-sigma_hat)/norm(C_n);
 end
 

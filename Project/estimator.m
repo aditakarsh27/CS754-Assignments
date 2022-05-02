@@ -24,7 +24,7 @@ for num = 1:num_samples
         X_hat(:,i) = Ri * Y(:,i);
     end
     %Estimate Covariance, Σ p×p
-    C_hat = s^2/((m + m^2)*n) * (X_hat * X_hat.');
+    C_hat = s^2/((m + m^2)*(n-1)) * (X_hat * X_hat.');
 
     a1 = K/(m+K+1);
     a2 = (m+1)/((m+1+K)*(m+1+K+p));
