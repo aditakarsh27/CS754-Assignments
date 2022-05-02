@@ -8,10 +8,14 @@ p = size(X,1)*size(X,2);
 n = size(X,3);
 X = reshape(X, [p  n]);
 
-image(reshape(X(:,100), [28 28])*255);
+mu = mean(X, 2);
+X = X - mu;
+
+figure(); imshow(reshape(X(:,100) + mu, [28 28]));
+figure(); imshow(reshape(mu, [28 28]));
 %% Generate random p×m projection matrices
-m = 80;
-s = 100;
+m = 40;
+s = 60;
 k = s-3;
 R = binornd(1, 1/s, n,p,m);
 pos = binornd(1, 0.5, n,p,m);
@@ -26,7 +30,7 @@ for i=1:n
     X_hat(:,i) = Ri * Y(:,i);
 end
 %% Estimate Covariance, Σ p×p
-C_hat = s^2/(m + m^2)*1/n * (X_hat * X_hat.');
+C_hat = s^2/((m + m^2)*n) * (X_hat * X_hat.');
 
 a1 = k/(m+k+1);
 a2 = (m+1)/((m+1+k)*(m+1+k+p));
@@ -34,7 +38,15 @@ I_pp = eye(p,p);
 diag_C_hat = I_pp.*C_hat;
 
 sigma_hat = C_hat - a1*diag_C_hat - a2*trace(C_hat)*I_pp;
-sigma = X*X.';
+%% Comparing eigenvalues
+[U, S, V] = svd(X);
+figure(); imshow(reshape(U(:,1) + mu, [28 28]));
+
+[V,D] = eig(sigma_hat);
+[D, ind] = sort(D);
+U = U(:, ind);
+figure(); imshow(reshape(V(:,784) + mu, [28 28]));
+
 
 
 
