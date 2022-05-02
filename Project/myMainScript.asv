@@ -23,19 +23,19 @@ X = X - mu;
 
 
 %% Comparing eigenvalues from estimator 
-img = X(:,8);
+img = X(:,5);
 figure(); imshow(reshape(img + mu, [28 28]));
 title('sample image from dataset');
 
-[U1, S, V1] = svd(X);
+% [U1, S, V1] = svd(X);
 % figure(); imshow(reshape(U1(:,2) + mu, [28 28]));
 % title('First eigenvector of sample covariance matrix');
 
 [V2,D] = eig(sigma_hat);
 [d, ind] = sort(diag(D), 'descend');
 V2 = V2(:, ind);
-% figure(); imshow(reshape(V2(:,2) + mu, [28 28]));
-% title('First eigenvector of estimated covariance matrix');
+figure(); imshow(reshape(V2(:,2) + mu, [28 28]));
+title('First eigenvector of estimated covariance matrix');
 
 k = 10;
 Uk = U1(:,1:k);         
@@ -49,19 +49,6 @@ beta = (Vk.')*img;
 reconstructed_approx = reshape((Vk * beta) + mu, 28,28);
 figure(); imshow(reconstructed_approx);
 title('chosen image reconstructed from top 10 eigenvectors of estimated covariance matrix');
-
-k = 50;
-Uk = U1(:,1:k);         
-alpha = (Uk.')*img;      
-reconstructed_true = reshape((Uk * alpha) + mu, 28,28);
-figure(); imshow(reconstructed_true);
-title('chosen image reconstructed from top 50 eigenvectors of sample covariance matrix');
-
-Vk = V2(:,1:k);         
-beta = (Vk.')*img;      
-reconstructed_approx = reshape((Vk * beta) + mu, 28,28);
-figure(); imshow(reconstructed_approx);
-title('chosen image reconstructed from top 50 eigenvectors of estimated covariance matrix');
 
 C_n = cov(X');
 display(norm(C_n-sigma_hat)/norm(C_n));

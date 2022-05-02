@@ -11,12 +11,12 @@ X = reshape(X, [p  n]);
 mu = mean(X, 2);
 X = X - mu;
 
-img = X(:,1);
+img = X(:,20);
 
 figure(); imshow(reshape(img + mu, [28 28]));
 title('chosen image from dataset');
-figure(); imshow(reshape(mu, [28 28]));
-title('mean image');
+% figure(); imshow(reshape(mu, [28 28]));
+% title('mean image');
 %% Generate random p×m projection matrices
 m = 40;
 s = 60;
@@ -44,27 +44,40 @@ diag_C_hat = I_pp.*C_hat;
 sigma_hat = C_hat - a1*diag_C_hat - a2*trace(C_hat)*I_pp;
 %% Comparing eigenvalues
 [U1, S, V1] = svd(X);
-figure(); imshow(reshape(U1(:,2) + mu, [28 28]));
-title('First eigenvector of sample covariance matrix');
+% figure(); imshow(reshape(U1(:,2) + mu, [28 28]));
+% title('First eigenvector of sample covariance matrix');
 
 [V2,D] = eig(sigma_hat);
 [d, ind] = sort(diag(D), 'descend');
 V2 = V2(:, ind);
-figure(); imshow(reshape(V2(:,2) + mu, [28 28]));
-title('First eigenvector of estimated covariance matrix');
+% figure(); imshow(reshape(V2(:,2) + mu, [28 28]));
+% title('First eigenvector of estimated covariance matrix');
 
 k = 10;
 Uk = U1(:,1:k);         
 alpha = (Uk.')*img;      
 reconstructed_true = reshape((Uk * alpha) + mu, 28,28);
 figure(); imshow(reconstructed_true);
-title('chosen image reconstructed from sample covariance matrix');
+title('chosen image reconstructed from top 10 eigenvectors of sample covariance matrix');
 
 Vk = V2(:,1:k);         
 beta = (Vk.')*img;      
 reconstructed_approx = reshape((Vk * beta) + mu, 28,28);
 figure(); imshow(reconstructed_approx);
-title('chosen image reconstructed from estimated covariance matrix');
+title('chosen image reconstructed from top 10 eigenvectors of estimated covariance matrix');
+
+k = 50;
+Uk = U1(:,1:k);         
+alpha = (Uk.')*img;      
+reconstructed_true = reshape((Uk * alpha) + mu, 28,28);
+figure(); imshow(reconstructed_true);
+title('chosen image reconstructed from top 50 eigenvectors of sample covariance matrix');
+
+Vk = V2(:,1:k);         
+beta = (Vk.')*img;      
+reconstructed_approx = reshape((Vk * beta) + mu, 28,28);
+figure(); imshow(reconstructed_approx);
+title('chosen image reconstructed from top 50 eigenvectors of estimated covariance matrix');
 
 
 
