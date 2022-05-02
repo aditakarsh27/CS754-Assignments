@@ -1,6 +1,6 @@
 clc;
-% clear;
-% load('mnist1.mat');
+clear;
+load('mnist1.mat');
 %% Setting up p×n matrix - X
 zero_labels = (training.labels==0);
 X = training.images(:,:,zero_labels);
@@ -41,15 +41,21 @@ diag_C_hat = I_pp.*C_hat;
 
 sigma_hat = C_hat - a1*diag_C_hat - a2*trace(C_hat)*I_pp;
 %% Comparing eigenvalues
-[U, S, V] = svd(X);
-figure(); imshow(reshape(U(:,1) + mu, [28 28]));
+[U1, S, V1] = svd(X);
+figure(); imshow(reshape(U1(:,1) + mu, [28 28]));
 title('First eigenvector of sample covariance matrix');
 
-[V,D] = eig(sigma_hat);
-[D, ind] = sort(D);
-U = U(:, ind);
-figure(); imshow(reshape(V(:,1) + mu, [28 28]));
+[V2,D] = eig(sigma_hat);
+[d, ind] = sort(diag(D), 'descend');
+V2 = V2(:, ind);
+figure(); imshow(reshape(V2(:,1) + mu, [28 28]));
 title('First eigenvector of estimated covariance matrix');
+
+% Uk = U(:,1:K(i));         
+% alpha = (Uk.')*im1;      
+% im2 = (Uk * alpha) + mu;
+% im3 = reshape(im2,112,92);
+% figure(); imshow(im3/255);
 
 
 
