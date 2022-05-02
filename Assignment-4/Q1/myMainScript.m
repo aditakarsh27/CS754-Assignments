@@ -1,5 +1,5 @@
 addpath('./l1_ls_matlab');
-rng(1,'twister');
+%rng(1,'twister');
 
 %% Generating data
 x = zeros(500,1);

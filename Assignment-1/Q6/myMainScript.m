@@ -105,6 +105,11 @@ H = flame.height;
 W = flame.width;
 F = zeros(H, W, T);
 offset = 30;
+
+for t=1:T
+    F(:,:,t) = flame.frames(t).cdata();
+    imwrite(flame.frames(t).cdata(), ['./images/flame_frame', int2str(t), '.png']);
+end
 for t=1:T
     F(:,:,t) = flame.frames(offset+t).cdata;
 end
