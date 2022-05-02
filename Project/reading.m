@@ -11,8 +11,10 @@ X = reshape(X, [p  n]);
 mu = mean(X, 2);
 X = X - mu;
 
-figure(); imshow(reshape(X(:,100) + mu, [28 28]));
+figure(); imshow(reshape(X(:,1) + mu, [28 28]));
+title('sample image from dataset');
 figure(); imshow(reshape(mu, [28 28]));
+title('sample mean image');
 %% Generate random p×m projection matrices
 m = 40;
 s = 60;
@@ -41,11 +43,13 @@ sigma_hat = C_hat - a1*diag_C_hat - a2*trace(C_hat)*I_pp;
 %% Comparing eigenvalues
 [U, S, V] = svd(X);
 figure(); imshow(reshape(U(:,1) + mu, [28 28]));
+title('First eigenvector of sample covariance matrix');
 
 [V,D] = eig(sigma_hat);
 [D, ind] = sort(D);
 U = U(:, ind);
-figure(); imshow(reshape(V(:,784) + mu, [28 28]));
+figure(); imshow(reshape(V(:,1) + mu, [28 28]));
+title('First eigenvector of estimated covariance matrix');
 
 
 
